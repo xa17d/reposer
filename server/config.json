@@ -7,7 +7,8 @@
         }
     },
     "webroot": {
-        "path": "./debug/webroot"
+        "path": "./debug/webroot",
+        "swap-path": "./debug/webroot-swap"
     },
     "renderer": {
         "type": "copy-html",

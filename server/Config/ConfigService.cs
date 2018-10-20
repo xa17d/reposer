@@ -58,6 +58,7 @@ namespace reposer.Config
         }
 
         public string WebrootPath => GetFolderFromConfig("webroot:path");
+        public string WebrootSwapPath => GetFolderFromConfig("webroot:swap-path");
 
         public string WebsiteRepositoryPath => GetFolderFromConfig("website-repository:path");
         public TimeSpan WebsiteRepositoryPollerInterval => GetTimeSpanFromConfig("website-repository:poller:interval");

@@ -7,7 +7,8 @@
         }
     },
     "webroot": {
-        "path": "/app/webroot"
+        "path": "/app/webroot",
+        "swap-path": "/app/webroot-swap"
     },
     "renderer": {
         "type": "reposer-md",
