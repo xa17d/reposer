@@ -12,6 +12,7 @@ namespace reposer.Repository
         public RepositoryPullServiceBase(ConfigService configService)
         {
             this.repositoryPath = configService.WebsiteRepositoryPath;
+            this.interval = configService.WebsiteRepositoryPollerInterval;
             Start();
         }
 
@@ -49,7 +50,7 @@ namespace reposer.Repository
                     Console.WriteLine($"Exception: {e.Message}");
                 }
 
-                Thread.Sleep((int)interval.TotalSeconds);
+                Thread.Sleep((int)interval.TotalMilliseconds);
             }
         }
 
