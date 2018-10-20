@@ -13,59 +13,25 @@ using reposer.Config;
 
 namespace reposer.Repository
 {
-    public class GitPullService : IRepositoryPullService
+    public class GitPullService : RepositoryPullServiceBase
     {
-        public GitPullService(ConfigService configService)
-        {
-            this.repositoryPath = configService.WebsiteRepositoryPath;
-            Start();
-        }
-
-        private readonly string repositoryPath;
-
-        private void Start()
-        {
-            workerThread = new Thread(Work)
-            {
-                IsBackground = true
-            };
-            workerThread.Start();
-        }
-
-        public event EventHandler<RepositoryChangedEventArgs> RepositoryChanged;
-
-        private void InvokeRepositoryChanged()
-        {
-            RepositoryChanged?.Invoke(this, new RepositoryChangedEventArgs(repositoryPath));
-        }
-
-        private Thread workerThread;
+        public GitPullService(ConfigService configService) : base(configService)
+        { }
 
         private string lastPullOutput = "";
-        private void Work()
+
+        protected override void OnPull()
         {
-            while (true)
+            Console.WriteLine("Git pull:");
+
+            var pullOutput = RunShell("git", "pull");
+            Console.WriteLine(pullOutput);
+
+            if (pullOutput != lastPullOutput)
             {
-                try
-                {
-                    Console.WriteLine("Git pull:");
-
-                    var pullOutput = RunShell("git", "pull");
-                    Console.WriteLine(pullOutput);
-
-                    if (pullOutput != lastPullOutput)
-                    {
-                        Console.WriteLine("Repo changed");
-                        InvokeRepositoryChanged();
-                        lastPullOutput = pullOutput;
-                    }
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine($"Exception: {e.Message}");
-                }
-
-                Thread.Sleep(30000);
+                Console.WriteLine("Repo changed");
+                InvokeRepositoryChanged();
+                lastPullOutput = pullOutput;
             }
         }
 

@@ -1,11 +1,16 @@
 {
     "website-repository": {
-        "path": "./debug/repository"
+        "path": "./debug/repository",
+        "poller": {
+            "type": "debug",
+            "interval": 5
+        }
     },
     "webroot": {
         "path": "./debug/webroot"
     },
     "renderer": {
+        "type": "copy-html",
         "path": "./debug/renderer/tmp"
     }
 }

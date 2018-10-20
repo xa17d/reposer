@@ -38,7 +38,7 @@ namespace reposer.Config
 
         private string GetFolderFromConfig(string configKey)
         {
-            var path = configuration.GetValue<string>(configKey);
+            var path = GetStringFromConfig(configKey);
             if (!Directory.Exists(path))
             {
                 Directory.CreateDirectory(path);
@@ -46,8 +46,24 @@ namespace reposer.Config
             return path;
         }
 
+        private TimeSpan GetTimeSpanFromConfig(string configKey)
+        {
+            var seconds = configuration.GetValue<int>(configKey);
+            return TimeSpan.FromSeconds(seconds);
+        }
+
+        private string GetStringFromConfig(string configKey)
+        {
+            return configuration.GetValue<string>(configKey);
+        }
+
         public string WebrootPath => GetFolderFromConfig("webroot:path");
+
         public string WebsiteRepositoryPath => GetFolderFromConfig("website-repository:path");
+        public TimeSpan WebsiteRepositoryPollerInterval => GetTimeSpanFromConfig("website-repository:poller:interval");
+        public string WebsiteRepositoryPollerType => GetStringFromConfig("website-repository:poller:type");
+
         public string RenderPath => GetFolderFromConfig("renderer:path");
+        public string RenderType => GetFolderFromConfig("renderer:type");
     }
 }

@@ -1,11 +1,16 @@
 {
     "website-repository": {
-        "path": "/app/repository"
+        "path": "/app/repository",
+        "poller": {
+            "type": "git",
+            "interval": 60
+        }
     },
     "webroot": {
         "path": "/app/webroot"
     },
     "renderer": {
+        "type": "reposer-md",
         "path": "/app/renderer/tmp"
     }
 }

@@ -20,8 +20,30 @@ namespace reposer
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddSingleton<ConfigService>(ConfigService.Instance);
-            services.AddSingleton<IRepositoryPullService, GitPullService>();
-            services.AddTransient<IRendererFactory, CopyHtmlRendererFactory>();
+
+            var pollerType = ConfigService.Instance.WebsiteRepositoryPollerType;
+            switch (pollerType)
+            {
+                case "git":
+                    services.AddSingleton<IRepositoryPullService, GitPullService>();
+                    break;
+
+                case "debug":
+                    services.AddSingleton<IRepositoryPullService, DebugPullService>();
+                    break;
+
+                default: throw new ArgumentException($"Unknown {nameof(pollerType)}: {pollerType}");
+            }
+
+            var rendererType = ConfigService.Instance.RenderType;
+            switch (rendererType)
+            {
+                case "copy-html":
+                    services.AddTransient<IRendererFactory, CopyHtmlRendererFactory>();
+                    break;
+
+                default: throw new ArgumentException($"Unknown {nameof(rendererType)}: {rendererType}");
+            }
             services.AddSingleton<RenderService>();
         }
 

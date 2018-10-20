@@ -8,13 +8,15 @@ namespace reposer.Rendering
 {
     public class RenderService
     {
-        public RenderService(IRepositoryPullService gitPullService, IRendererFactory rendererFactory)
+        public RenderService(IRepositoryPullService pullService, IRendererFactory rendererFactory)
         {
-            this.gitPullService = gitPullService;
-            this.gitPullService.RepositoryChanged += RepositoryChanged;
+            this.pullService = pullService;
+            this.rendererFactory = rendererFactory;
+
+            this.pullService.RepositoryChanged += RepositoryChanged;
         }
 
-        private readonly IRepositoryPullService gitPullService;
+        private readonly IRepositoryPullService pullService;
         private readonly IRendererFactory rendererFactory;
 
         private void RepositoryChanged(object sender, RepositoryChangedEventArgs e)
