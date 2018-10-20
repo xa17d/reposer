@@ -4,5 +4,8 @@
     },
     "webroot": {
         "path": "/app/webroot"
+    },
+    "renderer": {
+        "path": "/app/renderer/tmp"
     }
 }

@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace reposer.Git
+namespace reposer.Repository
 {
-    interface IGitPullService
+    public interface IRepositoryPullService
     {
         event EventHandler<RepositoryChangedEventArgs> RepositoryChanged;
     }

@@ -7,7 +7,9 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using reposer.Config;
-using reposer.Git;
+using reposer.Repository;
+using reposer.Rendering;
+using reposer.Rendering.CopyHtml;
 
 namespace reposer
 {
@@ -17,8 +19,10 @@ namespace reposer
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            services.Add(new ServiceDescriptor(typeof(ConfigService), ConfigService.Instance));
-            services.AddTransient<IGitPullService, GitPullService>();
+            services.AddSingleton<ConfigService>(ConfigService.Instance);
+            services.AddSingleton<IRepositoryPullService, GitPullService>();
+            services.AddTransient<IRendererFactory, CopyHtmlRendererFactory>();
+            services.AddSingleton<RenderService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -41,6 +45,8 @@ namespace reposer
             });
 
             //app.UseStatusCodePages();
+
+            app.ApplicationServices.GetService<RenderService>(); // Start Render Service
         }
     }
 }

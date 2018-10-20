@@ -9,7 +9,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using reposer.Config;
-using reposer.Git;
+using reposer.Repository;
 
 namespace reposer
 {

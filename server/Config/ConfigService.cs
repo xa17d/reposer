@@ -36,8 +36,9 @@ namespace reposer.Config
             instance = new ConfigService(configuration);
         }
 
-        private string CreateIfNotExists(string path)
+        private string GetFolderFromConfig(string configKey)
         {
+            var path = configuration.GetValue<string>(configKey);
             if (!Directory.Exists(path))
             {
                 Directory.CreateDirectory(path);
@@ -45,7 +46,8 @@ namespace reposer.Config
             return path;
         }
 
-        public string WebrootPath => CreateIfNotExists(configuration.GetValue<string>("webroot:path"));
-        public string WebsiteRepositoryPath => CreateIfNotExists(configuration.GetValue<string>("website-repository"));
+        public string WebrootPath => GetFolderFromConfig("webroot:path");
+        public string WebsiteRepositoryPath => GetFolderFromConfig("website-repository:path");
+        public string RenderPath => GetFolderFromConfig("renderer:path");
     }
 }

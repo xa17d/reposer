@@ -1,8 +1,11 @@
 {
     "website-repository": {
-        "path": "./repository"
+        "path": "./debug/repository"
     },
     "webroot": {
-        "path": "./webroot"
+        "path": "./debug/webroot"
+    },
+    "renderer": {
+        "path": "./debug/renderer/tmp"
     }
 }

@@ -11,9 +11,9 @@ using System.Diagnostics;
 using System.IO;
 using reposer.Config;
 
-namespace reposer.Git
+namespace reposer.Repository
 {
-    public class GitPullService : IGitPullService
+    public class GitPullService : IRepositoryPullService
     {
         public GitPullService(ConfigService configService)
         {
