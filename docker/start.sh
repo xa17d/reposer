@@ -22,6 +22,7 @@ mkdir -p "/root/.ssh"
 copyConfig "id_rsa" "/root/.ssh/id_rsa"
 copyConfig "id_rsa.pub" "/root/.ssh/id_rsa.pub"
 copyConfig "git-credentials" "/root/.git-credentials"
+copyConfig "config.json" "/app/bin/config.json"
 
 ##
 ## Clone repo

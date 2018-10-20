@@ -7,6 +7,8 @@ using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
+using reposer.Config;
 using reposer.Git;
 
 namespace reposer
@@ -20,9 +22,22 @@ namespace reposer
             CreateWebHostBuilder(args).Build().Run();
         }
 
-        public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
-            WebHost.CreateDefaultBuilder(args)
-                .UseWebRoot("/app/webroot")
+        public static IWebHostBuilder CreateWebHostBuilder(string[] args)
+        {
+            var config = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddCommandLine(args)
+                .AddJsonFile("config.json", optional: false, reloadOnChange: false)
+                .Build();
+
+            ConfigService.Setup(config);
+            var configService = ConfigService.Instance;
+
+            return new WebHostBuilder()
+                .UseConfiguration(config)
+                .UseKestrel()
+                .UseWebRoot(configService.WebrootPath)
                 .UseStartup<Startup>();
+        }
     }
 }

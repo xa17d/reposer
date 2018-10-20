@@ -1,0 +1,8 @@
+{
+    "website-repository": {
+        "path": "/app/repository"
+    },
+    "webroot": {
+        "path": "/app/webroot"
+    }
+}
