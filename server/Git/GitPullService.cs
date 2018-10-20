@@ -9,40 +9,58 @@ using Microsoft.Extensions.DependencyInjection;
 using System.Threading;
 using System.Diagnostics;
 using System.IO;
+using reposer.Config;
 
 namespace reposer.Git
 {
-    public class GitPuller
+    public class GitPullService : IGitPullService
     {
-        public void Start() {
-            workerThread = new Thread(Work);
-            workerThread.IsBackground = true;
+        public GitPullService(ConfigService configService)
+        {
+            this.repositoryPath = configService.WebsiteRepositoryPath;
+            Start();
+        }
+
+        private readonly string repositoryPath;
+
+        private void Start()
+        {
+            workerThread = new Thread(Work)
+            {
+                IsBackground = true
+            };
             workerThread.Start();
+        }
+
+        public event EventHandler<RepositoryChangedEventArgs> RepositoryChanged;
+
+        private void InvokeRepositoryChanged()
+        {
+            RepositoryChanged?.Invoke(this, new RepositoryChangedEventArgs(repositoryPath));
         }
 
         private Thread workerThread;
 
         private string lastPullOutput = "";
-        private void Work() {
-            while (true) {
-                try {
+        private void Work()
+        {
+            while (true)
+            {
+                try
+                {
                     Console.WriteLine("Git pull:");
 
                     var pullOutput = RunShell("git", "pull");
                     Console.WriteLine(pullOutput);
 
-                    if (pullOutput != lastPullOutput) 
+                    if (pullOutput != lastPullOutput)
                     {
-                        Console.WriteLine("Repo changed, copying...");
-                        CopyFilesRecursively(
-                            new DirectoryInfo("/app/repository"), 
-                            new DirectoryInfo("/app/webroot")
-                        );
-                        Console.WriteLine("copy done.");
+                        Console.WriteLine("Repo changed");
+                        InvokeRepositoryChanged();
                         lastPullOutput = pullOutput;
                     }
                 }
-                catch (Exception e) 
+                catch (Exception e)
                 {
                     Console.WriteLine($"Exception: {e.Message}");
                 }
@@ -51,7 +69,8 @@ namespace reposer.Git
             }
         }
 
-        private string RunShell(string command, string arguments) {
+        private string RunShell(string command, string arguments)
+        {
             ProcessStartInfo startInfo = new ProcessStartInfo();
             Process p = new Process();
 
@@ -62,24 +81,12 @@ namespace reposer.Git
             startInfo.UseShellExecute = false;
             startInfo.Arguments = arguments;
             startInfo.FileName = command;
-            startInfo.WorkingDirectory = "/app/repository/";
+            startInfo.WorkingDirectory = repositoryPath;
 
             p.StartInfo = startInfo;
             p.Start();
 
-            return p.StandardOutput.ReadToEnd(); 
-        }
-
-        public static void CopyFilesRecursively(DirectoryInfo source, DirectoryInfo target) {
-            foreach (DirectoryInfo dir in source.GetDirectories()) 
-            {
-                if (!dir.Name.StartsWith(".")) 
-                {
-                    CopyFilesRecursively(dir, target.CreateSubdirectory(dir.Name));
-                }
-            }
-            foreach (FileInfo file in source.GetFiles("*.html"))
-                file.CopyTo(Path.Combine(target.FullName, file.Name), true);
+            return p.StandardOutput.ReadToEnd();
         }
     }
 }

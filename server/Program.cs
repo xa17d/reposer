@@ -17,8 +17,6 @@ namespace reposer
     {
         public static void Main(string[] args)
         {
-            var gitPuller = new GitPuller();
-            gitPuller.Start();
             CreateWebHostBuilder(args).Build().Run();
         }
 

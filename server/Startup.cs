@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using reposer.Config;
+using reposer.Git;
 
 namespace reposer
 {
@@ -17,6 +18,7 @@ namespace reposer
         public void ConfigureServices(IServiceCollection services)
         {
             services.Add(new ServiceDescriptor(typeof(ConfigService), ConfigService.Instance));
+            services.AddTransient<IGitPullService, GitPullService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
