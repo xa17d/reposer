@@ -11,7 +11,7 @@
         "swap-path": "./debug/webroot-swap"
     },
     "renderer": {
-        "type": "copy-html",
+        "type": "remd",
         "path": "./debug/renderer/tmp"
     }
 }

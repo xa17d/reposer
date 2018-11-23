@@ -10,6 +10,7 @@ using reposer.Config;
 using reposer.Repository;
 using reposer.Rendering;
 using reposer.Rendering.CopyHtml;
+using reposer.Rendering.Remd;
 
 namespace reposer
 {
@@ -41,6 +42,10 @@ namespace reposer
                 case "copy-html":
                     services.AddTransient<IRendererFactory, CopyHtmlRendererFactory>();
                     break;
+                
+                case "remd":
+                    services.AddTransient<IRendererFactory, RemdRendererFactory>();
+                    break;                   
 
                 default: throw new ArgumentException($"Unknown {nameof(rendererType)}: {rendererType}");
             }
